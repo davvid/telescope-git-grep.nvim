@@ -1,0 +1,12 @@
+# Use "cargo install garden-tools" to install garden (https://github.com/davvid/garden).
+# Usage:
+#   garden lint
+commands:
+  lint: luacheck lua/telescope lua/git_grep
+
+trees:
+  telescope-git-grep.nvim:
+    path: ${GARDEN_CONFIG_DIR}
+    url: git@gitlab.com:davvid/telescope-git-grep.nvim
+    remotes:
+      github: git@github.com:davvid/telescope-git-grep.nvim
