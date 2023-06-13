@@ -102,7 +102,7 @@ Setting `use_git_root = false` will launch `git grep` from the subdirectory
 containing the current file. This causes `git grep` to only search files
 within that directory.
 
-Set `cwd = '/some/repo'` and set `use_git_root = true` if you want `git grep`
+Set `cwd = '/some/repo'` and set `use_git_root = false` if you want `git grep`
 to search in a specific directory.
 
 
@@ -114,9 +114,6 @@ checks using [Garden](https://github.com/davvid/garden).
 ```sh
 # Run lint checks using "luacheck"
 garden lint
-
-# Generate doc/telescope-git-grep.txt
-garden docgen
 ```
 
 
