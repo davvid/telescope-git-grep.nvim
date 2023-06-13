@@ -108,8 +108,8 @@ to search in a specific directory.
 
 ## Development
 
-The [Garden file](garden.yaml) can be used to generate docs and run lint
-checks using [Garden](https://github.com/davvid/garden).
+The [Garden file](garden.yaml) can be used to run lint checks using
+[Garden](https://github.com/davvid/garden).
 
 ```sh
 # Run lint checks using "luacheck"
