@@ -43,27 +43,30 @@ somewhere after your `require('telescope').setup()` call.
 The following `Telescope` extension commands are provided:
 
 ```VimL
-Telescope git_grep grep
-Telescope git_grep live_grep
+:Telescope git_grep grep
+:Telescope git_grep live_grep
 
-" Specify a custom repository path using the "cwd" option
-Telescope git_grep live_grep cwd=~/path/to/repo
+" Specify how "git grep" should interpret regex patterns.
+:Telescope git_grep live_grep regex=perl
+
+" Specify a custom repository path using the "cwd" option.
+:Telescope git_grep live_grep cwd=~/path/to/repo
+
 ```
 
 These commands can also be used from your `init.lua`.
+
 For example, to bind `git_grep` to `<leader>g` and `live_git_grep` to `<leader>G` use:
 
 ```lua
-local git_grep = require('git_grep')
-
--- Use git_grep to search for the current word and fuzzy-search over the result.
+-- Search for the current word and fuzzy-search over the result using git_grep.grep().
 vim.keymap.set({'n', 'v'}, '<leader>g', function()
-    git_grep.grep()
+    require('git_grep').grep()
 end)
 
--- Use live_grep to interactively search for a pattern.
+-- Interactively search for a pattern using git_grep.live_grep().
 vim.keymap.set('n', '<leader>G', function()
-    git_grep.live_grep()
+    require('git_grep').live_grep()
 end)
 ```
 
@@ -71,13 +74,14 @@ end)
 ## Configuration
 
 **NOTE**: You typically do not need to configure these fields.
-The following configuration fields are available when needed.
+The following configuration fields are available if needed.
 
 ```lua
 require('telescope').setup {
     extensions = {
         git_grep = {
             cwd = '%:h:p',
+            regex = 'extended',
             use_git_root = true
         }
     }
@@ -89,18 +93,44 @@ The values shown above are the default values. You do not typically need to spec
 
 You can also pass a `{ cwd = '...', use_git_root = true }` table as the first argument
 directly to the extension functions to set these values at specific call sites.
+Only a subset of the fields must be specified.
 
+As demonstrated in the `:Telescope git_grep` examples above, these fields can also be
+passed to the custom `:Telescope git_grep {grep,live_grep}` sub-commands using
+`key=value` expressions.
 
-## Notes
+### Regex Patterns
+
+The `regex` field specifies how `git` interprets grep patterns.
+The following values are supported for `regex`.
+
+- `extended` - Use POSIX extended regular expressions for patterns. This is the default value.
+- `basic` - Use POSIX basic regular expressions for patterns.
+- `fixed` - Use fixed strings for patterns. Don't interpret pattern as a regex.
+- `perl` - Use Perl-compatible regular expressoins for patterns.
+
+These values correspond to the `--extended-regexp`, `--basic-regexp`, `--fixed-strings`
+and `--perl-regexp` options, respectively. See `git help grep` for more details.
+
+**NOTE**: `git` must be compiled with PCRE support in order to use `perl` regexes.
+
+### Git Root Directory
+
+When `use_git_root` is enabled then the root of the Git repository will be detected
+and used as the current directory when launching `git grep`.
+
+Setting `use_git_root = false` will launch `git grep` from the subdirectory
+containing the current file. This causes `git grep` to only search files
+within that directory.
+
+### Current Working Directory
+
+The `cwd` field specifies the working directory to use when running `git grep`.
 
 The default values of `cwd = '%:h:p'` and `use_git_root = true` make it so that
 `git grep` commands are launched from the root of the repository corresponding
 to current buffer's file. If the buffer is an anonymous buffer (with no filename)
 then nvim's current directory will be used.
-
-Setting `use_git_root = false` will launch `git grep` from the subdirectory
-containing the current file. This causes `git grep` to only search files
-within that directory.
 
 Set `cwd = '/some/repo'` and set `use_git_root = false` if you want `git grep`
 to search in a specific directory.
