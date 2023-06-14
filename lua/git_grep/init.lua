@@ -13,15 +13,12 @@ local utils = require("telescope.utils")
 
 --- Set the opts.cwd field. This function was copied from telescope.builtins.__git.
 local set_opts_cwd = function(opts)
-  if opts.cwd then
-    opts.cwd = vim.fn.expand(opts.cwd)
+  local configured_cwd = opts.cwd or "%:h:p"
+  local cwd = vim.fn.expand(configured_cwd)
+  if string.len(cwd) > 0 then
+    opts.cwd = cwd
   else
-    local buffer_cwd = vim.fn.expand("%:h:p")
-    if string.len(buffer_cwd) > 0 then
-        opts.cwd = buffer_cwd
-    else
-        opts.cwd = vim.loop.cwd()
-    end
+    opts.cwd = vim.loop.cwd()
   end
 
   -- Find root of git directory and remove trailing newline characters
