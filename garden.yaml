@@ -1,4 +1,4 @@
-# Use "cargo install garden-tools" to install garden (https://github.com/davvid/garden).
+# Use "cargo install garden-tools" to install garden (https://gitlab.com/garden-rs/garden).
 # Usage:
 #   garden lint
 commands:
