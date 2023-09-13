@@ -78,8 +78,8 @@ local get_git_grep_command = function(prompt, opts)
     perl = '--perl-regexp',
   }
   local regex = regex_types[opts.regex] or regex_types[default_regex]
-  return flatten {
-    "git", "grep", "--column", "--line-number", regex, "-e", prompt, additional_args
+  return {
+    "git", "grep", "--no-color", "--column", "--line-number", regex, "-e", prompt, additional_args
   }
 end
 
