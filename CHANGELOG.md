@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.0.2
+
+**Fixes**
+
+- Typofix from the `v1.0.1` update.
+  ([#2](https://github.com/davvid/telescope-git-grep.nvim/pull/2))
+
+
 ## v1.0.1
 
 **Fixes**
