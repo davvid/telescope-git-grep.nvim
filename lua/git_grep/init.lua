@@ -2,6 +2,7 @@
 local git_grep = {}
 git_grep.config = {}
 
+local flatten = vim.tbl_flatten
 local actions = require("telescope.actions")
 local conf = require("telescope.config").values
 local finders = require("telescope.finders")
@@ -77,7 +78,7 @@ local get_git_grep_command = function(prompt, opts)
     perl = '--perl-regexp',
   }
   local regex = regex_types[opts.regex] or regex_types[default_regex]
-  return {
+  return flatten {
     "git", "grep", "--no-color", "--column", "--line-number", regex, "-e", prompt, additional_args
   }
 end
