@@ -2,7 +2,6 @@
 local git_grep = {}
 git_grep.config = {}
 
-local flatten = vim.tbl_flatten
 local actions = require("telescope.actions")
 local conf = require("telescope.config").values
 local finders = require("telescope.finders")
