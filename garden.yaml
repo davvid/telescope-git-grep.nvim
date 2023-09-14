@@ -10,3 +10,4 @@ trees:
     url: git@gitlab.com:davvid/telescope-git-grep.nvim
     remotes:
       github: git@github.com:davvid/telescope-git-grep.nvim
+      llllvvuu: git@github.com:llllvvuu/telescope-git-grep.nvim
