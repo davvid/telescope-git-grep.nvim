@@ -139,7 +139,7 @@ to search in a specific directory.
 ## Development
 
 The [Garden file](garden.yaml) can be used to run lint checks using
-[Garden](https://github.com/davvid/garden).
+[Garden](https://gitlab.com/garden-rs/garden).
 
 ```sh
 # Run lint checks using "luacheck"
