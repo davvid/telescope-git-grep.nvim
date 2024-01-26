@@ -13,20 +13,19 @@ You can install this plugin using your favorite vim package manager, eg.
 
 **Packer**:
 ```lua
-use({"davvid/telescope-git-grep.nvim", branch = "main"})
+use({"https://gitlab.com/davvid/telescope-git-grep.nvim"})
 ```
 
 **lazy**:
 ```lua
 {
-    "davvid/telescope-git-grep.nvim",
-    branch = "main"
+    "https://gitlab.com/davvid/telescope-git-grep.nvim"
 }
 ```
 
 **vim-plug**
 ```VimL
-Plug 'davvid/telescope-git-grep.nvim'
+Plug 'https://gitlab.com/davvid/telescope-git-grep.nvim'
 ```
 
 
