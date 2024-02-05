@@ -142,7 +142,7 @@ The [Garden file](garden.yaml) can be used to run lint checks using
 
 ```sh
 # Run lint checks using "luacheck"
-garden lint
+garden check
 ```
 
 
