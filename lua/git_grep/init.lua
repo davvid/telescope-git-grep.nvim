@@ -78,8 +78,23 @@ local get_git_grep_command = function(prompt, opts)
     perl = '--perl-regexp',
   }
   local regex = regex_types[opts.regex] or regex_types[default_regex]
+  local binary
+  if opts.skip_binary_files then
+    binary = "-I"
+  else
+    binary = "--text"
+  end
   return flatten {
-    "git", "grep", "--no-color", "--column", "--line-number", regex, "-e", prompt, additional_args
+    "git",
+    "grep",
+    "--no-color",
+    "--column",
+    "--line-number",
+    binary,
+    regex,
+    "-e",
+    prompt,
+    additional_args,
   }
 end
 

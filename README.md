@@ -81,6 +81,7 @@ require('telescope').setup {
         git_grep = {
             cwd = '%:h:p',
             regex = 'extended',
+            skip_binary_files = false,
             use_git_root = true
         }
     }
@@ -133,6 +134,11 @@ then nvim's current directory will be used.
 
 Set `cwd = '/some/repo'` and set `use_git_root = false` if you want `git grep`
 to search in a specific directory.
+
+### Binary Files
+
+Non-text binary files are searched by default.
+Set `skip_binary_files = true` to omit binary files from the grep results.
 
 
 ## Development
