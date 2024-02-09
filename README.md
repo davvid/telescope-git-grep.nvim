@@ -13,19 +13,19 @@ You can install this plugin using your favorite vim package manager, eg.
 
 **Packer**:
 ```lua
-use({"https://gitlab.com/davvid/telescope-git-grep.nvim"})
+use({'davvid/telescope-git-grep.nvim'})
 ```
 
 **lazy**:
 ```lua
 {
-    "https://gitlab.com/davvid/telescope-git-grep.nvim"
+    'davvid/telescope-git-grep.nvim'
 }
 ```
 
 **vim-plug**
 ```VimL
-Plug 'https://gitlab.com/davvid/telescope-git-grep.nvim'
+Plug 'davvid/telescope-git-grep.nvim'
 ```
 
 
@@ -150,6 +150,11 @@ The [Garden file](garden.yaml) can be used to run lint checks using
 # Run lint checks using "luacheck"
 garden check
 ```
+
+The [github repository](https://github.com/davvid/telescope-git-grep.nvim)
+is a mirror of the main
+[repository on gitlab](https://gitlab.com/davvid/telescope-git-grep.nvim)
+where you can file issues and submit merge requests.
 
 
 ## Acknowledgements
