@@ -42,7 +42,13 @@ somewhere after your `require('telescope').setup()` call.
 The following `Telescope` extension commands are provided:
 
 ```VimL
+" Perform a Live Grep
+:Telescope git_grep
+
+" Search for the current selection or the word under the cursor
 :Telescope git_grep grep
+
+" Perform a Live Grep
 :Telescope git_grep live_grep
 
 " Specify how "git grep" should interpret regex patterns.

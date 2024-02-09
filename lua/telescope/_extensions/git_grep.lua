@@ -8,6 +8,7 @@ return require('telescope').register_extension {
   end,
 
   exports = {
+    git_grep = git_grep.live_grep,
     grep = git_grep.grep,
     live_grep = git_grep.live_grep,
   }
