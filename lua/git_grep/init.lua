@@ -3,17 +3,17 @@ local git_grep = {}
 git_grep.config = {}
 
 local flatten = vim.tbl_flatten
-local actions = require("telescope.actions")
-local conf = require("telescope.config").values
-local finders = require("telescope.finders")
-local pickers = require("telescope.pickers")
-local sorters = require "telescope.sorters"
-local make_entry = require("telescope.make_entry")
-local utils = require("telescope.utils")
+local actions = require('telescope.actions')
+local conf = require('telescope.config').values
+local finders = require('telescope.finders')
+local pickers = require('telescope.pickers')
+local sorters = require 'telescope.sorters'
+local make_entry = require('telescope.make_entry')
+local utils = require('telescope.utils')
 
 --- Set the opts.cwd field. This function was copied from telescope.builtins.__git.
 local set_opts_cwd = function(opts)
-  local configured_cwd = opts.cwd or "%:h:p"
+  local configured_cwd = opts.cwd or '%:h:p'
   local cwd = vim.fn.expand(configured_cwd)
   if string.len(cwd) > 0 then
     opts.cwd = cwd
@@ -23,21 +23,21 @@ local set_opts_cwd = function(opts)
 
   -- Find root of git directory and remove trailing newline characters
   local git_root, ret = utils.get_os_command_output(
-    { "git", "rev-parse", "--show-toplevel" }, opts.cwd
+    { 'git', 'rev-parse', '--show-toplevel' }, opts.cwd
   )
   local use_git_root = vim.F.if_nil(opts.use_git_root, true)
 
   if ret ~= 0 then
     local in_worktree = utils.get_os_command_output(
-      { "git", "rev-parse", "--is-inside-work-tree" }, opts.cwd
+      { 'git', 'rev-parse', '--is-inside-work-tree' }, opts.cwd
     )
     local in_bare = utils.get_os_command_output(
-      { "git", "rev-parse", "--is-bare-repository" }, opts.cwd
+      { 'git', 'rev-parse', '--is-bare-repository' }, opts.cwd
     )
 
-    if in_worktree[1] ~= "true" and in_bare[1] ~= "true" then
-      error(opts.cwd .. " is not a git directory")
-    elseif in_worktree[1] ~= "true" and in_bare[1] == "true" then
+    if in_worktree[1] ~= 'true' and in_bare[1] ~= 'true' then
+      error(opts.cwd .. ' is not a git directory')
+    elseif in_worktree[1] ~= 'true' and in_bare[1] == 'true' then
       opts.is_bare = true
     end
   else
@@ -63,9 +63,9 @@ end
 local get_git_grep_command = function(prompt, opts)
   local additional_args = {}
   if opts.additional_args ~= nil then
-    if type(opts.additional_args) == "function" then
+    if type(opts.additional_args) == 'function' then
       additional_args = opts.additional_args(opts)
-    elseif type(opts.additional_args) == "table" then
+    elseif type(opts.additional_args) == 'table' then
       additional_args = opts.additional_args
     end
   end
@@ -80,19 +80,19 @@ local get_git_grep_command = function(prompt, opts)
   local regex = regex_types[opts.regex] or regex_types[default_regex]
   local binary
   if opts.skip_binary_files then
-    binary = "-I"
+    binary = '-I'
   else
-    binary = "--text"
+    binary = '--text'
   end
   return flatten {
-    "git",
-    "grep",
-    "--no-color",
-    "--column",
-    "--line-number",
+    'git',
+    'grep',
+    '--no-color',
+    '--column',
+    '--line-number',
     binary,
     regex,
-    "-e",
+    '-e',
     prompt,
     additional_args,
   }
@@ -103,7 +103,7 @@ git_grep.live_grep = function(opts)
   opts = get_git_grep_opts(opts)
 
   local live_grepper = finders.new_job(function(prompt)
-    if not prompt or prompt == "" then
+    if not prompt or prompt == '' then
       return nil
     end
     return get_git_grep_command(prompt, opts)
@@ -111,12 +111,12 @@ git_grep.live_grep = function(opts)
 
   pickers
     .new(opts, {
-      prompt_title = "Live Git Grep",
+      prompt_title = 'Live Git Grep',
       finder = live_grepper,
       previewer = conf.grep_previewer(opts),
       sorter = sorters.highlighter_only(opts),
       attach_mappings = function(_, map)
-        map("i", "<c-space>", actions.to_fuzzy_refine)
+        map('i', '<c-space>', actions.to_fuzzy_refine)
         return true
       end,
     })
@@ -128,16 +128,16 @@ git_grep.grep = function(opts)
   opts = get_git_grep_opts(opts)
   local prompt
   local vim_mode = vim.fn.mode()
-  local visual = vim_mode == "v" or vim_mode == ""
+  local visual = vim_mode == 'v' or vim_mode == ''
 
   if visual == true then
-    local saved_reg = vim.fn.getreg "v"
+    local saved_reg = vim.fn.getreg 'v'
     vim.cmd [[noautocmd sil norm "vy]]
-    local sele = vim.fn.getreg "v"
-    vim.fn.setreg("v", saved_reg)
+    local sele = vim.fn.getreg 'v'
+    vim.fn.setreg('v', saved_reg)
     prompt = vim.F.if_nil(opts.search, sele)
   else
-    prompt = vim.F.if_nil(opts.search, vim.fn.expand("<cword>"))
+    prompt = vim.F.if_nil(opts.search, vim.fn.expand('<cword>'))
   end
   if string.len(prompt) == 0 then
     return
@@ -148,12 +148,12 @@ git_grep.grep = function(opts)
 
   pickers
     .new(opts, {
-      prompt_title = "Git Grep (" .. prompt:gsub("\n", "\\n") .. ")",
+      prompt_title = 'Git Grep (' .. prompt:gsub('\n', '\\n') .. ')',
       finder = finders.new_oneshot_job(git_grep_cmd, opts),
       previewer = conf.grep_previewer(opts),
       sorter = conf.file_sorter(opts),
       attach_mappings = function(_, map)
-        map("i", "<c-space>", actions.to_fuzzy_refine)
+        map('i', '<c-space>', actions.to_fuzzy_refine)
         return true
       end,
     })
