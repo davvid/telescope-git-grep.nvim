@@ -122,13 +122,18 @@ git_grep.grep = function(opts)
     opts = get_git_grep_opts(opts)
     local prompt
     local vim_mode = vim.fn.mode()
-    local visual = vim_mode == 'v' or vim_mode == ''
+    local visual = vim_mode == 'v' or vim_mode == 'V' or vim_mode == ''
     if visual == true then
         local saved_reg = vim.fn.getreg 'v'
         vim.cmd [[noautocmd sil norm "vy]]
-        local sele = vim.fn.getreg 'v'
+        local selection = vim.fn.getreg 'v'
         vim.fn.setreg('v', saved_reg)
-        prompt = vim.F.if_nil(opts.search, sele)
+        -- Trim newlines from the start and end of the V selection.
+        if vim_mode == 'V' then
+            selection = selection:gsub('^%s+', '')
+            selection = selection:gsub('%s+$', '')
+        end
+        prompt = vim.F.if_nil(opts.search, selection)
     else
         prompt = vim.F.if_nil(opts.search, vim.fn.expand('<cword>'))
     end
