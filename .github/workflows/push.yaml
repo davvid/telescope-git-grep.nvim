@@ -11,9 +11,6 @@ jobs:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.12.1
       - uses: actions/checkout@v3
-        with:
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
-          ref: ${{ github.head_ref }}
       - run: sudo add-apt-repository ppa:neovim-ppa/stable
       - run: sudo apt-get update
       - run: sudo apt-get install -y bash neovim pandoc
