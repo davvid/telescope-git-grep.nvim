@@ -1,8 +1,21 @@
 # Use "cargo install garden-tools" to install garden (https://gitlab.com/garden-rs/garden).
 # Usage:
 #   garden check
+#   garden fmt
 commands:
-  check: luacheck lua/telescope lua/git_grep
+  check>:
+    - luacheck
+    - check/fmt
+  luacheck: luacheck lua/*
+  check/fmt: garden fmt -- --check
+  fmt: |
+    stylua \
+      --call-parentheses Always \
+      --column-width 88 \
+      --indent-type Spaces \
+      --quote-style AutoPreferSingle \
+      "$@" \
+      lua/*/*.lua
 
 trees:
   telescope-git-grep.nvim:
