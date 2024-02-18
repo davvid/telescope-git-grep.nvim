@@ -1,0 +1,187 @@
+*telescope-git-grep.txt* Telescope plugin for searching repositories using "git grep"
+
+==============================================================================
+1. telescope-git-grep                  *telescope-git-grep-telescope-git-grep*
+
+_Telescope Git Grep_ is a telescope
+<https://github.com/nvim-telescope/telescope.nvim> extension that uses `git
+grep` to search tracked files.
+
+
+INSTALLATION              *telescope-git-grep-telescope-git-grep-installation*
+
+You can install this plugin using your favorite vim package manager, eg.
+vim-plug <https://github.com/junegunn/vim-plug>, Packer
+<https://github.com/wbthomason/packer.nvim> or lazy
+<https://github.com/folke/lazy.nvim>.
+
+**Packer**:
+
+>lua
+    use({'davvid/telescope-git-grep.nvim'})
+<
+
+**lazy**:
+
+>lua
+    {
+        'davvid/telescope-git-grep.nvim'
+    }
+<
+
+**vim-plug**
+
+>viml
+    Plug 'davvid/telescope-git-grep.nvim'
+<
+
+
+USAGE                            *telescope-git-grep-telescope-git-grep-usage*
+
+Activate the custom Telescope commands and `git_grep` extension by adding
+
+>lua
+    require('telescope').load_extension('git_grep')
+<
+
+somewhere after your `require('telescope').setup()` call.
+
+The following `Telescope` extension commands are provided:
+
+>viml
+    " Perform a Live Grep
+    :Telescope git_grep
+    
+    " Search for the current selection or the word under the cursor
+    :Telescope git_grep grep
+    
+    " Perform a Live Grep
+    :Telescope git_grep live_grep
+    
+    " Specify how "git grep" should interpret regex patterns.
+    :Telescope git_grep live_grep regex=perl
+    
+    " Specify a custom repository path using the "cwd" option.
+    :Telescope git_grep live_grep cwd=~/path/to/repo
+<
+
+These commands can also be used from your `init.lua`.
+
+For example, to bind `git_grep` to `<leader>g` and `live_git_grep` to
+`<leader>G` use:
+
+>lua
+    -- Search for the current word and fuzzy-search over the result using git_grep.grep().
+    vim.keymap.set({'n', 'v'}, '<leader>g', function()
+        require('git_grep').grep()
+    end)
+    
+    -- Interactively search for a pattern using git_grep.live_grep().
+    vim.keymap.set('n', '<leader>G', function()
+        require('git_grep').live_grep()
+    end)
+<
+
+
+CONFIGURATION            *telescope-git-grep-telescope-git-grep-configuration*
+
+**NOTE**: You typically do not need to configure these fields. The following
+configuration fields are available if needed.
+
+>lua
+    require('telescope').setup {
+        extensions = {
+            git_grep = {
+                cwd = '%:h:p',
+                regex = 'extended',
+                skip_binary_files = false,
+                use_git_root = true
+            }
+        }
+    }
+<
+
+The values shown above are the default values. You do not typically need to
+specify the `git_grep = {...}` extension configuration if the defaults work
+fine for you as-is.
+
+You can also pass a `{ cwd = '...', use_git_root = true }` table as the first
+argument directly to the extension functions to set these values at specific
+call sites. Only a subset of the fields must be specified.
+
+As demonstrated in the `:Telescope git_grep` examples above, these fields can
+also be passed to the custom `:Telescope git_grep {grep,live_grep}`
+sub-commands using `key=value` expressions.
+
+
+REGEX PATTERNS ~
+
+The `regex` field specifies how `git` interprets grep patterns. The following
+values are supported for `regex`.
+
+- `extended` - Use POSIX extended regular expressions for patterns. This is the default value.
+- `basic` - Use POSIX basic regular expressions for patterns.
+- `fixed` - Use fixed strings for patterns. Don’t interpret pattern as a regex.
+- `perl` - Use Perl-compatible regular expressoins for patterns.
+
+These values correspond to the `--extended-regexp`, `--basic-regexp`,
+`--fixed-strings` and `--perl-regexp` options, respectively. See `git help
+grep` for more details.
+
+**NOTE**: `git` must be compiled with PCRE support in order to use `perl`
+regexes.
+
+
+GIT ROOT DIRECTORY ~
+
+When `use_git_root` is enabled then the root of the Git repository will be
+detected and used as the current directory when launching `git grep`.
+
+Setting `use_git_root = false` will launch `git grep` from the subdirectory
+containing the current file. This causes `git grep` to only search files within
+that directory.
+
+
+CURRENT WORKING DIRECTORY ~
+
+The `cwd` field specifies the working directory to use when running `git grep`.
+
+The default values of `cwd = '%:h:p'` and `use_git_root = true` make it so that
+`git grep` commands are launched from the root of the repository corresponding
+to current buffer’s file. If the buffer is an anonymous buffer (with no
+filename) then nvim’s current directory will be used.
+
+Set `cwd = '/some/repo'` and set `use_git_root = false` if you want `git grep`
+to search in a specific directory.
+
+
+BINARY FILES ~
+
+Non-text binary files are searched by default. Set `skip_binary_files = true`
+to omit binary files from the grep results.
+
+
+DEVELOPMENT                *telescope-git-grep-telescope-git-grep-development*
+
+The Garden file <garden.yaml> can be used to run lint checks using Garden
+<https://gitlab.com/garden-rs/garden>.
+
+>sh
+    # Run lint checks using "luacheck"
+    garden check
+<
+
+The github repository <https://github.com/davvid/telescope-git-grep.nvim> is a
+mirror of the main repository on gitlab
+<https://gitlab.com/davvid/telescope-git-grep.nvim> where you can file issues
+and submit merge requests.
+
+
+ACKNOWLEDGEMENTS      *telescope-git-grep-telescope-git-grep-acknowledgements*
+
+`telescope-git-grep` was adapted from Telescope’s internal
+`telescope/builtin/__git.lua` and `telescope/builtin/__files.lua` modules.
+
+
+
+vim:tw=78:ts=8:noet:ft=help:norl:
