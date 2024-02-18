@@ -1,0 +1,29 @@
+name: Test
+on: [pull_request]
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.head_ref }}
+      - run: sudo apt-get update
+      - run: sudo apt-get install luarocks -y
+      - run: sudo luarocks install luacheck
+      - run: date +%W >weekly
+      - name: Restore cache
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.cargo/bin
+          key: ${{ runner.os }}-cargo-${{ hashFiles('weekly') }}
+      - run:  rm -f weekly
+      - name: Install
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          rustup toolchain install stable --profile minimal --no-self-update
+          cargo install garden-tools
+          cargo install stylua
+      - run: garden -vv check
