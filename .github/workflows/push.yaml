@@ -8,16 +8,26 @@ jobs:
     permissions:
       contents: write
     steps:
-      - run: sudo add-apt-repository ppa:neovim-ppa/stable
-      - run: sudo apt-get update
-      - run: sudo apt-get install -y bash neovim pandoc
-      - run: rustup toolchain install stable --profile minimal --no-self-update
-      - run: cargo install garden-tools
-      - run: cargo install stylua
       - uses: actions/checkout@v3
         with:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.head_ref }}
+      - run: sudo add-apt-repository ppa:neovim-ppa/stable
+      - run: sudo apt-get update
+      - run: sudo apt-get install -y bash neovim pandoc
+      - run: date +%W > weekly
+      - name: Restore cache
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.cargo/bin
+          key: ${{ runner.os }}-cargo-${{ hashFiles('weekly') }}
+      - name: Install
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          rustup toolchain install stable --profile minimal --no-self-update
+          cargo install garden-tools
+          cargo install stylua
       - name: Generate docs
         uses: kdheepak/panvimdoc@main
         with:
@@ -26,12 +36,12 @@ jobs:
           pandoc: README.md
           toc: 'false'
       - run: garden -vv doc/post
-      - uses: stefanzweifel/git-auto-commit-action@v4
+      - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_author: cowcat <cowcat@localhost>
           commit_message: 'doc: generate vim docs'
       - run: garden -vv fmt
-      - uses: stefanzweifel/git-auto-commit-action@v4
+      - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_author: fatcat <fatcat@localhost>
           commit_message: 'lua: code formatting'
