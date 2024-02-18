@@ -1,4 +1,4 @@
-# telescope-git-grep.nvim
+# telescope-git-grep
 
 *Telescope Git Grep* is a [telescope](https://github.com/nvim-telescope/telescope.nvim)
 extension that uses `git grep` to search tracked files.

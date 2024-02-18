@@ -1,0 +1,37 @@
+name: Generate docs and format code
+on:
+  push:
+    branches: ['main', 'dev']
+jobs:
+  postprocessing:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - run: sudo add-apt-repository ppa:neovim-ppa/stable
+      - run: sudo apt-get update
+      - run: sudo apt-get install -y bash neovim pandoc
+      - run: rustup toolchain install stable --profile minimal --no-self-update
+      - run: cargo install garden-tools
+      - run: cargo install stylua
+      - uses: actions/checkout@v3
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.head_ref }}
+      - name: Generate docs
+        uses: kdheepak/panvimdoc@main
+        with:
+          description: ' Telescope plugin for searching repositories using "git grep"'
+          vimdoc: telescope-git-grep
+          pandoc: README.md
+          toc: 'false'
+      - run: garden -vv doc/post
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_author: cowcat <cowcat@localhost>
+          commit_message: 'doc: generate vim docs'
+      - run: garden -vv fmt
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_author: fatcat <fatcat@localhost>
+          commit_message: 'lua: code formatting'
