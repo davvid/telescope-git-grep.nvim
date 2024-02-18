@@ -24,13 +24,13 @@ jobs:
         with:
           path: ~/.cargo/bin
           key: ${{ runner.os }}-cargo-${{ hashFiles('weekly') }}
-      - run:  rm -f weekly
       - name: Install
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
           rustup toolchain install stable --profile minimal --no-self-update
           cargo install garden-tools
           cargo install stylua
+      - run:  rm -f weekly
       - name: Generate docs
         uses: kdheepak/panvimdoc@main
         with:

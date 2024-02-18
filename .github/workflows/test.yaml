@@ -21,7 +21,6 @@ jobs:
         with:
           path: ~/.cargo/bin
           key: ${{ runner.os }}-cargo-${{ hashFiles('weekly') }}
-      - run:  rm -f weekly
       - name: Install
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
