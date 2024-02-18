@@ -7,7 +7,7 @@ local actions = require('telescope.actions')
 local conf = require('telescope.config').values
 local finders = require('telescope.finders')
 local pickers = require('telescope.pickers')
-local sorters = require 'telescope.sorters'
+local sorters = require('telescope.sorters')
 local make_entry = require('telescope.make_entry')
 local utils = require('telescope.utils')
 
@@ -21,16 +21,17 @@ local set_opts_cwd = function(opts)
         opts.cwd = vim.loop.cwd()
     end
     -- Find root of git directory and remove trailing newline characters
-    local git_root, ret = utils.get_os_command_output(
-        { 'git', 'rev-parse', '--show-toplevel' }, opts.cwd
-    )
+    local git_root, ret =
+        utils.get_os_command_output({ 'git', 'rev-parse', '--show-toplevel' }, opts.cwd)
     local use_git_root = vim.F.if_nil(opts.use_git_root, true)
     if ret ~= 0 then
         local in_worktree = utils.get_os_command_output(
-            { 'git', 'rev-parse', '--is-inside-work-tree' }, opts.cwd
+            { 'git', 'rev-parse', '--is-inside-work-tree' },
+            opts.cwd
         )
         local in_bare = utils.get_os_command_output(
-            { 'git', 'rev-parse', '--is-bare-repository' }, opts.cwd
+            { 'git', 'rev-parse', '--is-bare-repository' },
+            opts.cwd
         )
         if in_worktree[1] ~= 'true' and in_bare[1] ~= 'true' then
             error(opts.cwd .. ' is not a git directory')
@@ -80,7 +81,7 @@ local get_git_grep_command = function(prompt, opts)
     else
         binary = '--text'
     end
-    return flatten {
+    return flatten({
         'git',
         'grep',
         '--no-color',
@@ -91,7 +92,7 @@ local get_git_grep_command = function(prompt, opts)
         '-e',
         prompt,
         additional_args,
-    }
+    })
 end
 
 --- Get the prompt for use by grep()
@@ -99,9 +100,9 @@ local get_grep_prompt = function(opts)
     local vim_mode = vim.fn.mode()
     local visual = vim_mode == 'v' or vim_mode == 'V' or vim_mode == ''
     if visual == true then
-        local saved_reg = vim.fn.getreg 'v'
-        vim.cmd [[noautocmd sil norm "vy]]
-        local selection = vim.fn.getreg 'v'
+        local saved_reg = vim.fn.getreg('v')
+        vim.cmd([[noautocmd sil norm "vy]])
+        local selection = vim.fn.getreg('v')
         vim.fn.setreg('v', saved_reg)
         -- Trim newlines from the start and end of the V selection.
         if vim_mode == 'V' then
@@ -117,12 +118,17 @@ end
 --- Interactively search for a pattern using "git grep"
 git_grep.live_grep = function(opts)
     opts = get_git_grep_opts(opts)
-    local live_grepper = finders.new_job(function(prompt)
-        if not prompt or prompt == '' then
-            return nil
-        end
-        return get_git_grep_command(prompt, opts)
-    end, opts.entry_maker or make_entry.gen_from_vimgrep(opts), opts.max_results, opts.cwd)
+    local live_grepper = finders.new_job(
+        function(prompt)
+            if not prompt or prompt == '' then
+                return nil
+            end
+            return get_git_grep_command(prompt, opts)
+        end,
+        opts.entry_maker or make_entry.gen_from_vimgrep(opts),
+        opts.max_results,
+        opts.cwd
+    )
     pickers
         .new(opts, {
             prompt_title = 'Live Git Grep',
