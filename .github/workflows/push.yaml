@@ -31,7 +31,7 @@ jobs:
       - name: Generate docs
         uses: kdheepak/panvimdoc@main
         with:
-          description: ' Telescope plugin for searching repositories using "git grep"'
+          description: Telescope plugin for searching using "git grep"
           vimdoc: telescope-git-grep
           pandoc: README.md
           toc: 'false'

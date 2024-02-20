@@ -28,7 +28,7 @@ trees:
       check/lua: luacheck lua
       doc: |
         panvimdoc.sh \
-          --description ' Telescope plugin for searching repositories using "git grep"' \
+          --description 'Telescope plugin for searching files using "git grep"' \
           --input-file README.md \
           --project-name ${TREE_NAME} \
           --toc false
