@@ -24,7 +24,7 @@ trees:
       check>:
         - check/lua
         - check/fmt
-      check/fmt: garden -vv fmt -- --check
+      check/fmt: garden ${GARDEN_CMD_VERBOSE} fmt -- --check
       check/lua: luacheck lua
       doc>:
         - doc/build
@@ -40,8 +40,8 @@ trees:
         nvim +'helptags doc | exit'
       fmt: stylua "$@" lua/*/*.lua
       setup: |
-        garden -vv grow panvimdoc
-        garden -vv deps panvimdoc
+        garden ${GARDEN_CMD_VERBOSE} grow panvimdoc
+        garden ${GARDEN_CMD_VERBOSE} deps panvimdoc
 
   panvimdoc:
     description: Generate vimdoc documentation from pandoc markdown
