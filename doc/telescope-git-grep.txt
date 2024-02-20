@@ -1,4 +1,4 @@
-*telescope-git-grep.txt* Telescope plugin for searching files using "git grep"
+*telescope-git-grep.txt*       Telescope plugin for searching using "git grep"
 
 ==============================================================================
 1. telescope-git-grep                  *telescope-git-grep-telescope-git-grep*
