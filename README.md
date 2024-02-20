@@ -157,6 +157,15 @@ The [Garden file](garden.yaml) can be used to run lint checks using
 garden check
 ```
 
+The documentation is generated using [panvimdoc](https://github.com/kdheepak/panvimdoc.git).
+
+```bash
+garden setup  # one-time setup
+garden doc
+```
+
+Use `garden fmt` to apply code formatting using [stylua](https://github.com/JohnnyMorganz/StyLua).
+
 The [github repository](https://github.com/davvid/telescope-git-grep.nvim)
 is a mirror of the main
 [repository on gitlab](https://gitlab.com/davvid/telescope-git-grep.nvim)
