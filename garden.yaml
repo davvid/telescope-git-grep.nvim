@@ -13,6 +13,7 @@ trees:
     url: git@gitlab.com:davvid/telescope-git-grep.nvim.git
     remotes:
       github: git@github.com:davvid/telescope-git-grep.nvim.git
+      CGamesPlay: git@gitlab.com:CGamesPlay/telescope-git-grep.nvim.git
       llllvvuu: git@github.com:llllvvuu/telescope-git-grep.nvim.git
     gitconfig:
       remote.publish.pushurl:
