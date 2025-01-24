@@ -86,7 +86,7 @@ require('telescope').setup {
     extensions = {
         git_grep = {
             cwd = '%:h:p',
-            regex = 'extended',
+            regex = nil,
             skip_binary_files = false,
             use_git_root = true
         }
@@ -110,13 +110,15 @@ passed to the custom `:Telescope git_grep {grep,live_grep}` sub-commands using
 The `regex` field specifies how `git` interprets grep patterns.
 The following values are supported for `regex`.
 
-- `extended` - Use POSIX extended regular expressions for patterns. This is the default value.
+- `extended` - Use POSIX extended regular expressions for patterns.
 - `basic` - Use POSIX basic regular expressions for patterns.
 - `fixed` - Use fixed strings for patterns. Don't interpret pattern as a regex.
 - `perl` - Use Perl-compatible regular expressoins for patterns.
 
-These values correspond to the `--extended-regexp`, `--basic-regexp`, `--fixed-strings`
-and `--perl-regexp` options, respectively. See `git help grep` for more details.
+These values correspond to the `--extended-regexp`, `--basic-regexp`,
+`--fixed-strings` and `--perl-regexp` options, respectively. The default value
+comes from the git configuration `grep.patternType`. See `git help grep` for
+more details.
 
 **NOTE**: `git` must be compiled with PCRE support in order to use `perl` regexes.
 

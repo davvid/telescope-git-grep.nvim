@@ -67,14 +67,13 @@ local get_git_grep_command = function(prompt, opts)
             additional_args = opts.additional_args
         end
     end
-    local default_regex = 'extended'
     local regex_types = {
         extended = '--extended-regexp',
         basic = '--basic-regexp',
         fixed = '--fixed-strings',
         perl = '--perl-regexp',
     }
-    local regex = regex_types[opts.regex] or regex_types[default_regex]
+    local regex = opts.regex and regex_types[opts.regex] or nil
     local binary
     if opts.skip_binary_files then
         binary = '-I'
@@ -88,7 +87,7 @@ local get_git_grep_command = function(prompt, opts)
         '--column',
         '--line-number',
         binary,
-        regex,
+        regex or {},
         '-e',
         prompt,
         additional_args,
