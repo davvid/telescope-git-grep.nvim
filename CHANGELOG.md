@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.1.0
+
+The grep regex type is no longer passed to `git grep` unless it is configured to do so
+in the lua configuration. This makes the plugin use the same regex type as your git
+configuration by default. See the [README](README.md) for more details.
+
+If you suddenly no longer have extended regexes and do not want to change your
+git configuration, configure `regex = 'extended'` in your neovim lua configuration to
+get the original behavior.
+
+
 ## v1.0.2
 
 **Fixes**
