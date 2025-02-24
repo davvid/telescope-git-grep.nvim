@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.1.1
+
+The results were being limited to `250` results in newer Telescope versions.
+We now override this limit to `10000`. Configure `max_results` if the default
+value of `10000` is not sufficient.
+
+
 ## v1.1.0
 
 The grep regex type is no longer passed to `git grep` unless it is configured to do so

@@ -54,6 +54,12 @@ local get_git_grep_opts = function(opts)
     end
     opts = vim.F.if_nil(opts, config)
     set_opts_cwd(opts)
+    -- Hack: workaround so that we can se eall results
+    -- https://github.com/nvim-telescope/telescope.nvim/issues/2779
+    if not opts.max_results then
+        opts.max_results = 10000
+    end
+    opts.temp__scrolling_limit = opts.max_results
     return opts
 end
 
