@@ -88,7 +88,8 @@ require('telescope').setup {
             cwd = '%:h:p',
             regex = nil,
             skip_binary_files = false,
-            use_git_root = true
+            use_git_root = true,
+            max_results = 10000,
         }
     }
 }
