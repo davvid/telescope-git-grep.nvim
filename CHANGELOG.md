@@ -1,17 +1,30 @@
 # Changelog
 
+## v1.2.0
+
+**Features**
+
+- The title can now be customized using the `search_title` option.
+
+- The grep command can now be customized using the `grep_command` option.
+
+
 ## v1.1.1
 
-The results were being limited to `250` results in newer Telescope versions.
-We now override this limit to `10000`. Configure `max_results` if the default
-value of `10000` is not sufficient.
+**Features**
+
+- The results were being limited to `250` results in newer Telescope versions.
+  We now override this limit to `10000`. Configure `max_results` if the default
+  value of `10000` is not sufficient.
 
 
 ## v1.1.0
 
-The grep regex type is no longer passed to `git grep` unless it is configured to do so
-in the lua configuration. This makes the plugin use the same regex type as your git
-configuration by default. See the [README](README.md) for more details.
+**Features**
+
+- The grep regex type is no longer passed to `git grep` unless it is configured to do so
+  in the lua configuration. This makes the plugin use the same regex type as your git
+  configuration by default. See the [README](README.md) for more details.
 
 If you suddenly no longer have extended regexes and do not want to change your
 git configuration, configure `regex = 'extended'` in your neovim lua configuration to

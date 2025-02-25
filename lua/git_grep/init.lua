@@ -73,6 +73,9 @@ local get_git_grep_command = function(prompt, opts)
             additional_args = opts.additional_args
         end
     end
+    if opts.grep_command ~= nil then
+        return flatten({ opts.grep_command, prompt, additional_args })
+    end
     local regex_types = {
         extended = '--extended-regexp',
         basic = '--basic-regexp',
@@ -136,7 +139,7 @@ git_grep.live_grep = function(opts)
     )
     pickers
         .new(opts, {
-            prompt_title = 'Live Git Grep',
+            prompt_title = opts.search_title or 'Live Git Grep',
             finder = live_grepper,
             previewer = conf.grep_previewer(opts),
             sorter = sorters.highlighter_only(opts),
@@ -159,7 +162,10 @@ git_grep.grep = function(opts)
     opts.entry_maker = opts.entry_maker or make_entry.gen_from_vimgrep(opts)
     pickers
         .new(opts, {
-            prompt_title = 'Git Grep (' .. prompt:gsub('\n', '\\n') .. ')',
+            prompt_title = (opts.search_title or 'Git Grep') .. ' (' .. prompt:gsub(
+                '\n',
+                '\\n'
+            ) .. ')',
             finder = finders.new_oneshot_job(git_grep_cmd, opts),
             previewer = conf.grep_previewer(opts),
             sorter = conf.file_sorter(opts),

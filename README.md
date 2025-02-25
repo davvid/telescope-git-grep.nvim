@@ -90,6 +90,7 @@ require('telescope').setup {
             skip_binary_files = false,
             use_git_root = true,
             max_results = 10000,
+            search_title = 'Git Grep',
         }
     }
 }
