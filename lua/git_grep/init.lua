@@ -34,7 +34,10 @@ local set_opts_cwd = function(opts)
             opts.cwd
         )
         if in_worktree[1] ~= 'true' and in_bare[1] ~= 'true' then
-            error(opts.cwd .. ' is not a git directory')
+            -- We are not in a git repository, but we should still allow things to run
+            -- in case the user has a custom grep_command configured.
+            opts.is_bare = false
+            opts.is_worktree = false
         elseif in_worktree[1] ~= 'true' and in_bare[1] == 'true' then
             opts.is_bare = true
         end
