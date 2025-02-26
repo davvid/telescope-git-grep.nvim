@@ -183,7 +183,6 @@ git_grep.grep = function(opts)
         :find()
 end
 
-
 --- Return a table of git repositories corresponding to the current open buffers.
 local get_buffer_repos = function()
     local repos = {}
@@ -218,7 +217,6 @@ local endswith = function(str, suffix)
     return str:sub(-#suffix) == suffix
 end
 
-
 -- Transform a partial /foo/ba path into /foo.
 local trim_path = function(prefix)
     -- Trim until we reach the last slash.
@@ -235,7 +233,7 @@ end
 --- Return the longest common prefix in a table of strings
 local get_common_path_prefix = function(strs)
     if #strs == 0 then
-        return ''  -- Return an empty string if the input table is empty
+        return '' -- Return an empty string if the input table is empty
     end
 
     -- Find the smallest string length in the table
@@ -246,14 +244,14 @@ local get_common_path_prefix = function(strs)
 
     local prefix = ''
     for i = 1, min_length do
-        local char = strs[1]:sub(i, i)  -- Get the character from the first string
+        local char = strs[1]:sub(i, i) -- Get the character from the first string
         for j = 2, #strs do
             if strs[j]:sub(i, i) ~= char then
                 -- Return the prefix if a mismatch is found
                 return trim_path(prefix)
             end
         end
-        prefix = prefix .. char  -- Add the character to the prefix if all strings match
+        prefix = prefix .. char -- Add the character to the prefix if all strings match
     end
 
     return trim_path(prefix)
