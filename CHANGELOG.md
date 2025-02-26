@@ -8,6 +8,8 @@
 
 - The grep command can now be customized using the `grep_command` option.
 
+- An error is no longer produced when run outside of a git repository.
+
 
 ## v1.1.1
 
