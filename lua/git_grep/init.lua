@@ -15,7 +15,7 @@ local utils = require('telescope.utils')
 local set_opts_cwd = function(opts)
     local configured_cwd = opts.cwd or '%:h:p'
     local cwd = vim.fn.expand(configured_cwd)
-    if string.len(cwd) > 0 then
+    if cwd:len() > 0 then
         opts.cwd = cwd
     else
         opts.cwd = vim.loop.cwd()
@@ -40,11 +40,14 @@ local set_opts_cwd = function(opts)
             opts.is_worktree = false
         elseif in_worktree[1] ~= 'true' and in_bare[1] == 'true' then
             opts.is_bare = true
+            opts.is_worktree = false
         end
     else
         if use_git_root then
             opts.cwd = git_root[1]
         end
+        opts.is_worktree = true
+        opts.is_bare = false
     end
 end
 
@@ -92,9 +95,9 @@ local get_git_grep_command = function(prompt, opts)
     else
         binary = '--text'
     end
+    local git_grep = vim.F.if_nil(opts.git_grep, { 'git', 'grep' })
     return flatten({
-        'git',
-        'grep',
+        git_grep,
         '--no-color',
         '--column',
         '--line-number',
@@ -158,7 +161,7 @@ end
 git_grep.grep = function(opts)
     opts = get_git_grep_opts(opts)
     local prompt = get_grep_prompt(opts)
-    if string.len(prompt) == 0 then
+    if prompt:len() == 0 then
         return
     end
     local git_grep_cmd = get_git_grep_command(prompt, opts)
@@ -178,6 +181,123 @@ git_grep.grep = function(opts)
             end,
         })
         :find()
+end
+
+
+--- Return a table of git repositories corresponding to the current open buffers.
+local get_buffer_repos = function()
+    local repos = {}
+    local buffers = vim.api.nvim_list_bufs()
+    for _, buffer in ipairs(buffers) do
+        local filename = vim.api.nvim_buf_get_name(buffer)
+        if filename:len() > 0 and vim.uv.fs_stat(filename) then
+            -- Gather a unique set of git repositories corresopnding to the open buffers.
+            local dirname = vim.fs.dirname(filename)
+            local file_opts = {
+                cwd = dirname,
+                use_git_root = true,
+            }
+            set_opts_cwd(file_opts)
+            -- We will only process the ones that are actual worktrees.
+            if file_opts.is_worktree then
+                repos[file_opts.cwd] = true
+            end
+        end
+    end
+    -- Return a flat table.
+    local result = {}
+    for repo, _ in pairs(repos) do
+        table.insert(result, repo)
+    end
+
+    return result
+end
+
+--- Return true if the string ends with suffix
+local endswith = function(str, suffix)
+    return str:sub(-#suffix) == suffix
+end
+
+
+-- Transform a partial /foo/ba path into /foo.
+local trim_path = function(prefix)
+    -- Trim until we reach the last slash.
+    while prefix:len() > 1 and not endswith(prefix, '/') do
+        prefix = prefix:sub(1, -2)
+    end
+    -- Trim the final trailing slash unless the path is '/'.
+    if prefix ~= '/' and endswith(prefix, '/') then
+        prefix = prefix:sub(1, -2)
+    end
+    return prefix
+end
+
+--- Return the longest common prefix in a table of strings
+local get_common_path_prefix = function(strs)
+    if #strs == 0 then
+        return ''  -- Return an empty string if the input table is empty
+    end
+
+    -- Find the smallest string length in the table
+    local min_length = #strs[1]
+    for i = 2, #strs do
+        min_length = math.min(min_length, #strs[i])
+    end
+
+    local prefix = ''
+    for i = 1, min_length do
+        local char = strs[1]:sub(i, i)  -- Get the character from the first string
+        for j = 2, #strs do
+            if strs[j]:sub(i, i) ~= char then
+                -- Return the prefix if a mismatch is found
+                return trim_path(prefix)
+            end
+        end
+        prefix = prefix .. char  -- Add the character to the prefix if all strings match
+    end
+
+    return trim_path(prefix)
+end
+
+--- Calculate a git grep workspace command
+local get_git_grep_workspace_command = function(repos)
+    local this_module_path = debug.getinfo(1).source:match('@?(.*/)')
+    local git_grep_cmd = { this_module_path .. 'git-grep-workspace' }
+    for _, repo in ipairs(repos) do
+        table.insert(git_grep_cmd, repo)
+    end
+    return git_grep_cmd
+end
+
+--- Use "git grep" across all repositories that are currently open in your
+--- current session.
+git_grep.workspace_grep = function(opts)
+    opts = get_git_grep_opts(opts)
+    local prompt = get_grep_prompt(opts)
+    if prompt:len() == 0 then
+        return
+    end
+    local repos = get_buffer_repos()
+    opts.cwd = get_common_path_prefix(repos)
+    opts.git_grep = get_git_grep_workspace_command(repos)
+    opts.use_git_root = false
+
+    git_grep.grep(opts)
+end
+
+--- A live grep over all worktrees in your current session.
+git_grep.workspace_live_grep = function(opts)
+    opts = get_git_grep_opts(opts)
+    local prompt = get_grep_prompt(opts)
+    if prompt:len() == 0 then
+        return
+    end
+    local repos = get_buffer_repos()
+    opts.cwd = get_common_path_prefix(repos)
+    opts.git_grep = get_git_grep_workspace_command(repos)
+    opts.use_git_root = false
+
+    git_grep.live_grep(opts)
 end
 
 return git_grep

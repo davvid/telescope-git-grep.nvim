@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.3.0
+
+**Features**
+
+- New `git_grep.workspace_grep` and `git_grep.workspace_live_grep` commands
+  are available for performing `git grep` across all of the repositories
+  in your current session.
+
+
 ## v1.2.0
 
 **Features**

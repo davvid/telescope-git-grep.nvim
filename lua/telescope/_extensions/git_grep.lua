@@ -11,5 +11,7 @@ return require('telescope').register_extension {
         git_grep = git_grep.live_grep,
         grep = git_grep.grep,
         live_grep = git_grep.live_grep,
+        workspace_grep = git_grep.workspace_grep,
+        workspace_live_grep = git_grep.workspace_live_grep,
     }
 }

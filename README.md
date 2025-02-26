@@ -57,6 +57,12 @@ The following `Telescope` extension commands are provided:
 " Specify a custom repository path using the "cwd" option.
 :Telescope git_grep live_grep cwd=~/path/to/repo
 
+" Search for the current selection or the word under the cursor across all worktrees in your session
+:Telescope git_grep workspace_grep
+
+" Perform a Live Grep across all worktrees in your session
+:Telescope git_grep workspace_live_grep
+
 ```
 
 These commands can also be used from your `init.lua`.
@@ -64,16 +70,34 @@ These commands can also be used from your `init.lua`.
 For example, to bind `git_grep` to `<leader>g` and `live_git_grep` to `<leader>G` use:
 
 ```lua
--- Search for the current word and fuzzy-search over the result using git_grep.grep().
+-- Search for the current word in your current worktree
 vim.keymap.set({'n', 'v'}, '<leader>g', function()
     require('git_grep').grep()
 end)
 
--- Interactively search for a pattern using git_grep.live_grep().
+-- Interactively search for a pattern in your current worktree
 vim.keymap.set('n', '<leader>G', function()
     require('git_grep').live_grep()
 end)
+
+-- Search for the current word across all workspaces in your current session
+vim.keymap.set({'n', 'v'}, '<leader>g', function()
+    require('git_grep').workspace_grep()
+end)
+
+-- Interactively search for a pattern across all worktrees in your current session
+vim.keymap.set('n', '<leader>G', function()
+    require('git_grep').workspace_live_grep()
+end)
 ```
+
+
+## Workspace Grep Search
+
+The `worskpace_grep` and `workspace_live_grep` commands operate over all of the worktrees
+in your current session. Your "current session" is defined as all of the buffers that you
+currently have open. These commands will find all of the git worktrees corresponding to
+your open buffers and performs searches over all of them in a single shot.
 
 
 ## Configuration
@@ -133,6 +157,8 @@ Setting `use_git_root = false` will launch `git grep` from the subdirectory
 containing the current file. This causes `git grep` to only search files
 within that directory.
 
+The `use_git_root` is ignored when using the `worskpace` grep commands.
+
 ### Current Working Directory
 
 The `cwd` field specifies the working directory to use when running `git grep`.
@@ -144,6 +170,8 @@ then nvim's current directory will be used.
 
 Set `cwd = '/some/repo'` and set `use_git_root = false` if you want `git grep`
 to search in a specific directory.
+
+The `cwd` option is ignored when using the `workspace` grep commands.
 
 ### Binary Files
 
