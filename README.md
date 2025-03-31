@@ -96,8 +96,9 @@ end)
 
 The `worskpace_grep` and `workspace_live_grep` commands operate over all of the worktrees
 in your current session. Your "current session" is defined as all of the buffers that you
-currently have open. These commands will find all of the git worktrees corresponding to
-your open buffers and performs searches over all of them in a single shot.
+currently have open, plus the cwd of vim. These commands will find all of the git
+worktrees corresponding to your open buffers and performs searches over all of them in a
+single shot.
 
 
 ## Configuration

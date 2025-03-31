@@ -183,7 +183,7 @@ git_grep.grep = function(opts)
         :find()
 end
 
---- Return a table of git repositories corresponding to the current open buffers.
+--- Return a table of git repositories corresponding to the current open buffers plus the cwd.
 local get_buffer_repos = function()
     local repos = {}
     local buffers = vim.api.nvim_list_bufs()
@@ -202,6 +202,12 @@ local get_buffer_repos = function()
                 repos[file_opts.cwd] = true
             end
         end
+    end
+    -- Also attempt to use vim's cwd
+    local cwd_opts = { cwd = vim.loop.cwd(), use_git_root = true }
+    set_opts_cwd(cwd_opts)
+    if cwd_opts.is_worktree then
+        repos[cwd_opts.cwd] = true
     end
     -- Return a flat table.
     local result = {}
@@ -286,10 +292,6 @@ end
 --- A live grep over all worktrees in your current session.
 git_grep.workspace_live_grep = function(opts)
     opts = get_git_grep_opts(opts)
-    local prompt = get_grep_prompt(opts)
-    if prompt:len() == 0 then
-        return
-    end
     local repos = get_buffer_repos()
     opts.cwd = get_common_path_prefix(repos)
     opts.git_grep = get_git_grep_workspace_command(repos)
