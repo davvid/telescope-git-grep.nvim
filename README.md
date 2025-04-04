@@ -111,11 +111,11 @@ require('telescope').setup {
     extensions = {
         git_grep = {
             cwd = '%:h:p',
+            max_results = 10000,
             regex = nil,
+            search_title = 'Git Grep',
             skip_binary_files = false,
             use_git_root = true,
-            max_results = 10000,
-            search_title = 'Git Grep',
         }
     }
 }
