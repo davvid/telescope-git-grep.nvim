@@ -116,6 +116,7 @@ require('telescope').setup {
             search_title = 'Git Grep',
             skip_binary_files = false,
             use_git_root = true,
+            use_vim_cwd = true,
         }
     }
 }
@@ -173,6 +174,8 @@ Set `cwd = '/some/repo'` and set `use_git_root = false` if you want `git grep`
 to search in a specific directory.
 
 The `cwd` option is ignored when using the `workspace` grep commands.
+The `workspace` grep commands will include vim's current directory when searching.
+Set `use_vim_cwd = false` to exclude vim's cwd from the locations to search.
 
 ### Binary Files
 

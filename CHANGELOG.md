@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.4.0
+
+**Features**
+
+- The current directory is now included in the list of repositories to search
+  when using the "workspace" grep functions. Set `use_vim_cwd = false`
+  when configuring the plugin to disable this behavior.
+
 ## v1.3.0
 
 **Features**
