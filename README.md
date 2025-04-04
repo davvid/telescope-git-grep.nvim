@@ -81,12 +81,12 @@ vim.keymap.set('n', '<leader>G', function()
 end)
 
 -- Search for the current word across all workspaces in your current session
-vim.keymap.set({'n', 'v'}, '<leader>g', function()
+vim.keymap.set({'n', 'v'}, '<leader>wg', function()
     require('git_grep').workspace_grep()
 end)
 
 -- Interactively search for a pattern across all worktrees in your current session
-vim.keymap.set('n', '<leader>G', function()
+vim.keymap.set('n', '<leader>wG', function()
     require('git_grep').workspace_live_grep()
 end)
 ```
