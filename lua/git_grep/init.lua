@@ -95,9 +95,9 @@ local get_git_grep_command = function(prompt, opts)
     else
         binary = '--text'
     end
-    local git_grep = vim.F.if_nil(opts.git_grep, { 'git', 'grep' })
+    local git_grep_cmd = vim.F.if_nil(opts.git_grep, { 'git', 'grep' })
     return flatten({
-        git_grep,
+        git_grep_cmd,
         '--no-color',
         '--column',
         '--line-number',
