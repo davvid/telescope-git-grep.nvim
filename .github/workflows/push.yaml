@@ -10,14 +10,14 @@ jobs:
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.12.1
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - run: sudo add-apt-repository ppa:neovim-ppa/stable
       - run: sudo apt-get update
       - run: sudo apt-get install -y bash neovim pandoc
       - run: date +%W >weekly
       - name: Restore cache
         id: cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ~/.cargo/bin
           key: ${{ runner.os }}-cargo-${{ hashFiles('weekly') }}
@@ -35,12 +35,12 @@ jobs:
           vimdoc: telescope-git-grep
           pandoc: README.md
           toc: 'false'
-      - run: garden -vv doc/post
+      - run: garden doc/post -vv
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_author: cowcat <cowcat@localhost>
           commit_message: 'doc: generate vim docs'
-      - run: garden -vv fmt
+      - run: garden fmt -vv
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_author: fatcat <fatcat@localhost>
