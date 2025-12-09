@@ -2,7 +2,6 @@
 local git_grep = {}
 git_grep.config = {}
 
-local flatten = vim.tbl_flatten
 local actions = require('telescope.actions')
 local conf = require('telescope.config').values
 local finders = require('telescope.finders')
@@ -10,6 +9,18 @@ local pickers = require('telescope.pickers')
 local sorters = require('telescope.sorters')
 local make_entry = require('telescope.make_entry')
 local utils = require('telescope.utils')
+
+local flatten = (function()
+  if vim.fn.has('nvim-0.11') == 1 then
+    return function(t)
+      return vim.iter(t):flatten():totable()
+    end
+  else
+    return function(t)
+      return vim.tbl_flatten(t)
+    end
+  end
+end)()
 
 --- Set the opts.cwd field. This function was copied from telescope.builtins.__git.
 local set_opts_cwd = function(opts)
