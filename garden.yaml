@@ -12,9 +12,10 @@ trees:
     path: ${GARDEN_CONFIG_DIR}
     url: git@gitlab.com:davvid/telescope-git-grep.nvim.git
     remotes:
-      github: git@github.com:davvid/telescope-git-grep.nvim.git
       CGamesPlay: git@gitlab.com:CGamesPlay/telescope-git-grep.nvim.git
+      github: git@github.com:davvid/telescope-git-grep.nvim.git
       llllvvuu: git@github.com:llllvvuu/telescope-git-grep.nvim.git
+      perrin4869: git@github.com:perrin4869/telescope-git-grep.nvim.git
     gitconfig:
       remote.publish.pushurl:
         - git@gitlab.com:davvid/telescope-git-grep.nvim.git
