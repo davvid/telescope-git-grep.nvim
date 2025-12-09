@@ -11,15 +11,15 @@ local make_entry = require('telescope.make_entry')
 local utils = require('telescope.utils')
 
 local flatten = (function()
-  if vim.fn.has('nvim-0.11') == 1 then
-    return function(t)
-      return vim.iter(t):flatten():totable()
+    if vim.fn.has('nvim-0.11') == 1 then
+        return function(t)
+            return vim.iter(t):flatten():totable()
+        end
+    else
+        return function(t)
+            return vim.tbl_flatten(t)
+        end
     end
-  else
-    return function(t)
-      return vim.tbl_flatten(t)
-    end
-  end
 end)()
 
 --- Set the opts.cwd field. This function was copied from telescope.builtins.__git.
