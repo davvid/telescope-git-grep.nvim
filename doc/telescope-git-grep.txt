@@ -1,4 +1,5 @@
 *telescope-git-grep.txt*       Telescope plugin for searching using "git grep"
+                               For NVIM v0.8.0    Last change: 2026 October 27
 
 ==============================================================================
 1. telescope-git-grep                  *telescope-git-grep-telescope-git-grep*
@@ -51,22 +52,22 @@ The following `Telescope` extension commands are provided:
 >viml
     " Perform a Live Grep
     :Telescope git_grep
-    
+
     " Search for the current selection or the word under the cursor
     :Telescope git_grep grep
-    
+
     " Perform a Live Grep
     :Telescope git_grep live_grep
-    
+
     " Specify how "git grep" should interpret regex patterns.
     :Telescope git_grep live_grep regex=perl
-    
+
     " Specify a custom repository path using the "cwd" option.
     :Telescope git_grep live_grep cwd=~/path/to/repo
-    
+
     " Search for the current selection or the word under the cursor across all worktrees in your session
     :Telescope git_grep workspace_grep
-    
+
     " Perform a Live Grep across all worktrees in your session
     :Telescope git_grep workspace_live_grep
 <
@@ -81,17 +82,17 @@ For example, to bind `git_grep` to `<leader>g` and `live_git_grep` to
     vim.keymap.set({'n', 'v'}, '<leader>g', function()
         require('git_grep').grep()
     end)
-    
+
     -- Interactively search for a pattern in your current worktree
     vim.keymap.set('n', '<leader>G', function()
         require('git_grep').live_grep()
     end)
-    
+
     -- Search for the current word across all workspaces in your current session
     vim.keymap.set({'n', 'v'}, '<leader>wg', function()
         require('git_grep').workspace_grep()
     end)
-    
+
     -- Interactively search for a pattern across all worktrees in your current session
     vim.keymap.set('n', '<leader>wG', function()
         require('git_grep').workspace_live_grep()
@@ -117,6 +118,7 @@ configuration fields are available if needed.
     require('telescope').setup {
         extensions = {
             git_grep = {
+                cached = false,
                 cwd = '%:h:p',
                 max_results = 10000,
                 regex = nil,
@@ -195,6 +197,15 @@ BINARY FILES ~
 
 Non-text binary files are searched by default. Set `skip_binary_files = true`
 to omit binary files from the grep results.
+
+
+CACHED MODE ~
+
+Set the `cached` option to `true` to enable the faster `git grep --cached`
+mode. When enabled, `git grep` will search blobs registered in the index
+instead of searching tracked worktree files.
+
+Combine this with `regex = 'fixed'` for the fastest fixed-string lookups.
 
 
 DEVELOPMENT                *telescope-git-grep-telescope-git-grep-development*
