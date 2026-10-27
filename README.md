@@ -110,6 +110,7 @@ The following configuration fields are available if needed.
 require('telescope').setup {
     extensions = {
         git_grep = {
+            cached = false,
             cwd = '%:h:p',
             max_results = 10000,
             regex = nil,
@@ -181,6 +182,14 @@ Set `use_vim_cwd = false` to exclude vim's cwd from the locations to search.
 
 Non-text binary files are searched by default.
 Set `skip_binary_files = true` to omit binary files from the grep results.
+
+### Cached Mode
+
+Set the `cached` option to `true` to enable the faster `git grep --cached` mode.
+When enabled, `git grep` will search blobs registered in the index instead
+of searching tracked worktree files.
+
+Combine this with `regex = 'fixed'` for the fastest fixed-string lookups.
 
 
 ## Development

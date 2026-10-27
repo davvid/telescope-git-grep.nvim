@@ -100,6 +100,7 @@ local get_git_grep_command = function(prompt, opts)
         perl = '--perl-regexp',
     }
     local regex = opts.regex and regex_types[opts.regex] or nil
+    local cached = opts.cached and '--cached' or false
     local binary
     if opts.skip_binary_files then
         binary = '-I'
@@ -113,6 +114,7 @@ local get_git_grep_command = function(prompt, opts)
         '--column',
         '--line-number',
         binary,
+        cached or {},
         regex or {},
         '-e',
         prompt,
